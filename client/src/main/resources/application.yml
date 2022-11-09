@@ -1,0 +1,6 @@
+grpc:
+  client:
+    grpc-eucossa-shipment-service:
+      address: static://localhost:9001 # TODO
+      negotiation-type: plaintext
+

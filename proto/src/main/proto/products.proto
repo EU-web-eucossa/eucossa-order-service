@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package com.eucossa.grpc.inventory;
+
+option java_multiple_files = true;
+
+message Product {
+  string name = 1;
+  float price = 2;
+  bool inStock = 3;
+  Category category = 4;
+}
+
+message Category{
+  string name=1;
+  string description=2;
+  string image =3;
+  string _id=4;
+  string createdAt=5;
+  string updatedAt=6;
+}
+
+message Empty {}
+
+message CategoryList{
+  repeated Category categories=1;
+}
+
+message ProductsList {
+  repeated Product products = 1;
+}
+message UpdateProductRequest{
+  Product product=1;
+  string id=2;
+}
+message DeleteProductService{
+  string id=1;
+}
+
+message DeleteProductResponse{
+  bool deleted=1;
+  string message=2;
+}
+
+message GetProductByIdRequest {
+  string id = 1;
+}
+
+message SearchProductRequest{
+  string searchQuery=1;
+}
+
+service ProductsService {
+  rpc getAllProducts (Empty) returns (ProductsList) {};
+  rpc addNewProduct (Product) returns (Product) {};
+  rpc updateProduct (UpdateProductRequest) returns (Product){};
+  rpc deleteProduct(DeleteProductService)returns (DeleteProductResponse){};
+  rpc searchProduct (SearchProductRequest) returns (ProductsList);
+  rpc getProductById(GetProductByIdRequest) returns (Product);
+}
+
+service CategoryService {
+  rpc getAllCategories (Empty) returns (CategoryList) {};
+  rpc addNewCategory (Category) returns (Category) {};
+  rpc updateCategory (Category) returns (Category){};
+  rpc deleteCategory(Category)returns (Category){};
+}
+
+
+
+
+
+
+
+
+
+message OrderPayload {
+  repeated Product products = 1;
+  Payment paymentInfo = 2;
+  string orderId = 3;
+}
+
+message Payment{
+  string  intent = 1;
+  string state = 2 ;
+  string cart = 3;
+  Payer payer = 4;
+  repeated Transaction transcations = 5;
+  int32 httpStatusCode = 6;
+  string create_time = 7;
+  string update_time = 8;
+  repeated Link links = 9;
+}
+
+message Payer {
+  string paymentMethod = 1;
+  string status = 2;
+  PayerInfo payerInfo = 3;
+}
+
+message PayerInfo {
+  string email = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string payerId = 4;
+  ShippingAddress shippingAddress = 5;
+  string countryCode = 6;
+}
+
+message ShippingAddress {
+  string recipientName = 1;
+  string  line1 = 2;
+  string  city = 3 ;
+  string  state = 4;
+  string  postalCode = 5;
+  string  countyCode = 6;
+}
+message Transaction{
+  Amount amount = 1;
+  Payee payee = 2;
+  string description = 3;
+  ItemList itemList = 4;
+  RelatedResources relatedResources = 5;
+}
+
+message Amount{
+  string total = 1;
+  string currency = 2;
+  Details details = 3;
+}
+
+message Details {
+  string subTotal = 1 ;
+  string shipping = 2;
+  string insurance = 3;
+  string handlingFees = 4;
+  string shippingDiscount = 5;
+}
+
+message ItemList {
+  repeated Item items = 1;
+  ShippingAddress shippingAddress = 2;
+}
+message Item  {
+  string  name = 1;
+  string  sku = 2;
+  string  price = 3;
+  string  currency = 4;
+  string  tax = 5;
+  string  quantity = 6;
+}
+message Payee{
+  string merchantId = 1;
+  string email = 2;
+}
+
+message Sale {
+  string id = 1;
+  string state = 2;
+  Amount amount = 3;
+  string paymentMode = 4;
+  string protectionEligibility = 5;
+  string protectionEligibilityType = 6;
+  TransactionFee transactionFee = 7;
+  string parentPayment = 8;
+  string create_time = 9;
+  string update_time = 10;
+  repeated Link links = 11;
+}
+
+
+message TransactionFee {
+  string value = 1 ;
+  string currency = 2;
+}
+message RelatedResources {
+  Sale sale = 1;
+}
+
+message Link {
+  string href = 1;
+  string rel = 2;
+  string method = 3;
+}
+
+message ShipmentResponse {
+  string msg = 1;
+  string shipmentId = 2;
+}
